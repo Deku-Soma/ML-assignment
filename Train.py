@@ -2,17 +2,17 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 import numpy as np
+import Clean_Data as cd
 
-# Load the data from the text file into a NumPy array
-input_data = np.loadtxt('traindata.txt', delimiter=',')
 
-# Print the shape of the array (optional)
-input_labels = np.loadtxt('trainlabels.txt', delimiter=',')
+data_file = 'traindata.txt'
+labels_file = 'trainlabels.txt'
+X_train, X_val, y_train, y_val = cd.preprocess_data(data_file, labels_file)
 
-x_train = tf.constant(input_data[:int(len(input_data)*0.9)])
-y_train = tf.constant(input_labels[:int(len(input_labels)*0.9)])
-x_test = tf.constant(input_data[int(len(input_data)*0.9):])
-y_test = tf.constant(input_labels[int(len(input_labels)*0.9):])
+x_train = tf.constant(X_train)
+y_train = tf.constant(y_train)
+x_test = tf.constant(X_val)
+y_test = tf.constant(y_val)
 
 model = tf.keras.models.Sequential()
 
