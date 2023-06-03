@@ -19,8 +19,6 @@ model = tf.keras.models.Sequential()
 model.add(layers.Dense(71, activation="relu"))
 model.add(layers.Dense(10))
 
-model.
-
 model.compile(
     loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
     optimizer=keras.optimizers.Adam(lr=0.001),
