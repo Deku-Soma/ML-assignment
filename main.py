@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
 
 
 def clean_data(data_points, labels):
@@ -41,5 +43,15 @@ data_file = 'traindata.txt'
 labels_file = 'trainlabels.txt'
 X_train, X_val, y_train, y_val = preprocess_data(data_file, labels_file)
 
-# print(X_val)
+#print(X_val,y_train)
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+# Make predictions on the test data
+y_pred = classifier.predict(X_val)
+
+# Calculate the accuracy of the classifier
+print(y_val[3])
+print(y_pred[3])
+accuracy = accuracy_score(y_val, y_pred)
+print("Accuracy:", accuracy)
 # The cleaned and preprocessed data is now available in the variables X_train, X_val, y_train, and y_val.
