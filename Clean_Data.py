@@ -18,7 +18,7 @@ def clean_data(data_points, labels):
                                                                                                             
     return data_points, labels                                                                              
                                                                                                             
-def preprocess_data(data_file, labels_file, n_components, random_state):                                    
+def preprocess_data(data_file, labels_file, n_components=10, random_state=42):
     # Step 1: Load the data                                                                                 
     data_points = np.loadtxt(data_file, delimiter=',')                                                      
     labels = np.loadtxt(labels_file)                                                                        
@@ -40,7 +40,7 @@ def preprocess_data(data_file, labels_file, n_components, random_state):
     data_points = pca.fit_transform(data_points)                                                            
                                                                                                             
     # Step 4: Split the dataset into training and validation subsets                                        
-    X_train, X_val, y_train, y_val = train_test_split(data_points, labels, test_size=0.2, random_state=42)  #just keep this value here because it complains if its not initialised 
+    X_train, X_val, y_train, y_val = train_test_split(data_points, labels, test_size=0.2, random_state=random_state)  #just keep this value here because it complains if its not initialised
                                                                                                             
     return X_train, X_val, y_train, y_val                                                                   
                                                                                                             
