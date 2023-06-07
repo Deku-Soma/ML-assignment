@@ -1,7 +1,8 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-
+from sklearn.impute import SimpleImputer
+from sklearn.decomposition import PCA
 
 def clean_data(data_points, labels):
     # Step 1: Remove any invalid or missing data points
@@ -11,12 +12,11 @@ def clean_data(data_points, labels):
 
     # Step 2: Remove outliers using Z-score method
     z_scores = np.abs((data_points - np.mean(data_points, axis=0)) / np.std(data_points, axis=0))
-    valid_indices = np.all(z_scores < 3, axis=1)  # Set threshold for outliers (e.g., 3 standard deviations)
+    valid_indices = np.all(z_scores < 3, axis=1)
     data_points = data_points[valid_indices]
     labels = labels[valid_indices]
 
     return data_points, labels
-
 
 def preprocess_data(data_file, labels_file):
     # Step 1: Load the data
@@ -27,19 +27,24 @@ def preprocess_data(data_file, labels_file):
     data_points, labels = clean_data(data_points, labels)
 
     # Step 3: Data pre-processing
+    # Handle missing data with mean imputation
+    imputer = SimpleImputer(strategy='mean')
+    data_points = imputer.fit_transform(data_points)
+
+    # Perform feature scaling/normalization
     scaler = StandardScaler()
-    data_points = scaler.fit_transform(data_points)  # fit_transform: normalises the data
+    data_points = scaler.fit_transform(data_points)
+
+    # Dimensionality reduction with PCA
+    pca = PCA(n_components=10)  # Reduce to 10 principal components
+    data_points = pca.fit_transform(data_points)
 
     # Step 4: Split the dataset into training and validation subsets
     X_train, X_val, y_train, y_val = train_test_split(data_points, labels, test_size=0.2, random_state=42)
 
     return X_train, X_val, y_train, y_val
 
-
 # Example usage
 # data_file = 'traindata.txt'
 # labels_file = 'trainlabels.txt'
 # X_train, X_val, y_train, y_val = preprocess_data(data_file, labels_file)
-
-# print(X_val)
-# The cleaned and preprocessed data is now available in the variables X_train, X_val, y_train, and y_val.
