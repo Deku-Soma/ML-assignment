@@ -17,7 +17,7 @@ for i in range(1, 100):
     for j in range(1, 100):
 
         MLPClass = MLPClassifier(alpha=1e-05, hidden_layer_sizes=(i, j), random_state=0,
-                                 solver='lbfgs', max_iter=199, learning_rate_init=0.001, activation="relu", verbose="False")
+                                 solver='lbfgs', max_iter=199, learning_rate_init=0.001, activation="relu")
 
         MLPClass.fit(X_train, y_train)
 
