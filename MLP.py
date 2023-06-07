@@ -12,29 +12,30 @@ data_file = 'traindata.txt'
 labels_file = 'trainlabels.txt'
 x_train, x_test, y_train, y_test = Clean_Data.preprocess_data(data_file, labels_file)
 
-print("Feature matrix:", x_train.shape)
-print("Target matrix:", x_test.shape)
-print("Feature matrix:", y_train.shape)
-print("Target matrix:", y_test.shape)
+# Define a list of model configurations
+model_configs = [
+    {'hidden_units': 256},
+    {'hidden_units': 128},
+    {'hidden_units': 64}
+]
 
-model = Sequential([
+for config in model_configs:
+    # Create a new model based on the configuration
+    model = Sequential([
+        # reshape 28 row * 28 column data to 28*28 rows
+        # dense layer 1
+        Dense(config['hidden_units'], activation='sigmoid'),
+        # dense layer 2
+        Dense(128, activation='sigmoid'),
+        # output layer
+        Dense(10, activation='sigmoid'),
+    ])
 
-    # reshape 28 row * 28 column data to 28*28 rows
-    Flatten(input_shape=(28, 28)),
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    # dense layer 1
-    Dense(256, activation='sigmoid'),
+    # Train the model
+    model.fit(x_train, y_train, epochs=10, batch_size=32, verbose=0)
 
-    # dense layer 2
-    Dense(128, activation='sigmoid'),
-
-    # output layer
-    Dense(10, activation='sigmoid'),
-])
-
-model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-results = model.evaluate(x_test, y_test, verbose = 0)
-print('test loss, test acc:', results)
-
-
+    # Evaluate the model
+    results = model.evaluate(x_test, y_test, verbose=0)
+    print('Model with', config['hidden_units'], 'hidden units - Test loss, Test accuracy:', results)
